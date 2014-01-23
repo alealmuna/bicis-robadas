@@ -3,7 +3,7 @@ LOCAL_DEBUG = True
 LOCAL_DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'database-name', 
+        'NAME': 'bicis-robadas', 
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
 
@@ -15,7 +15,7 @@ LOCAL_DATABASES = {
 }
 
 LOCAL_EMAIL_SETTINGS = {
-    'EMAIL_SENDER_NAME': "Sender name",
+    'EMAIL_SENDER_NAME': "Bicis Robadas",
     'SENDER_EMAIL': 'sender email',
 
     # Amazon AWS settings

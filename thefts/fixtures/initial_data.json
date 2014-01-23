@@ -1,0 +1,21 @@
+[
+{
+    "pk": 1,
+    "model": "thefts.report",
+    "fields": {
+        "user": 1,
+        "location": "POINT (-70.65377353637925 -33.442928172811015)",
+        "lock_type": 1,
+        "unseen_time": 30,
+        "bike_price": 350000,
+        "bike_specs": "mini azul bien azikalá",
+        "date": "2014-01-20T14:52:23.666Z",
+        "circumstances": "Estaba comiendome un melón con cerdo y me la pelaron",
+        "with_violence": "False",
+        "police_report_filled": "False",
+        "found": "True",
+        "found_details": "Vino un señor a mi casa y me dijo: \"Buenos días, buenas tardes, aquí está su bicicleta\" ",
+        "created_at": "2014-01-22T14:52:23.666Z"
+    }
+}
+]

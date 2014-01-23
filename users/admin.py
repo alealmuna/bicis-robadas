@@ -1,8 +1,7 @@
 """ Admin page configuration for the users app """
 
-from base.admin import GoogleAdmin
-
 from django.contrib import admin
+from base.admin import OSMAdmin
 
 from users.models import User
 from users.forms import UserCreationForm
@@ -12,7 +11,7 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 
-class UserAdmin(DjangoUserAdmin, GoogleAdmin):
+class UserAdmin(DjangoUserAdmin, OSMAdmin):
     """ Configuration for the User admin page"""
     add_form_template = 'admin/users/user/add_form.html'
 
@@ -25,7 +24,6 @@ class UserAdmin(DjangoUserAdmin, GoogleAdmin):
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
-        (_('Geo data'), {'fields': ('point',)}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
