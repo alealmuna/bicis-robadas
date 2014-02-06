@@ -7,6 +7,8 @@ local_settings.py
 config/media/
 config/static
 *.ini
+*.swp
+*.swo
 gunicorn.sh
 
 fabfile/templates/ssh_key
