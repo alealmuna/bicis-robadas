@@ -7,7 +7,7 @@ doctype 5
 html(lang="es")
   head
     meta(charset="utf-8")
-    title Project {% block title %} {%endblock%}
+    title BicisRobadas {% block title %} {%endblock%}
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(name="description", content="")
     meta(name="author", content="http://magnet.cl")
@@ -21,6 +21,7 @@ html(lang="es")
     link(href="{% static 'css/site.css' %}", rel="stylesheet")
     link(href="{% static 'css/detail.css' %}", rel="stylesheet")
     link(href="{% static 'css/form.css' %}", rel="stylesheet")
+    link(href="{% static 'css/facebook.css'%}", rel="stylesheet")
     {% endcompress %}
 
     //if lte IE 7
@@ -44,7 +45,7 @@ html(lang="es")
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href="{% url 'home' %}") Project
+            a.navbar-brand(href="{% url 'home' %}") BicisRobadas
           div.navbar-collapse.collapse
             - if user.is_authenticated 
               {% if user.is_staff %}
@@ -53,39 +54,6 @@ html(lang="es")
                   a(href="{% url 'admin:index' %}") Administración
               {% endif %}
               ul.nav.navbar-nav
-                li
-                  a(href="#") Link 1
-              ul.nav.navbar-nav
-                li
-                  a(href="#") Link 2
-
-            ul.nav.navbar-nav.navbar-right
-              {% if user.is_authenticated %}
-              li.dropdown
-                a.dropdown-toggle(href="#", data-toggle="dropdown")
-                  | Logged in as {{user.email}}
-                  b.caret
-
-                ul.dropdown-menu
-                  li
-                    a(href="{% url 'users.views.password_change' %}")
-                      | Modificar Contraseña
-                  li
-                    a(href="{% url 'users.views.logout' %}") Logout
-              {% else %}
-              li.dropdown
-                a.dropdown-toggle(href="#", data-toggle="dropdown")
-                  | Login
-                  b.caret
-
-                ul.dropdown-menu
-                  li
-                    a(href="{% url 'login' %}")
-                      | Login
-                  li
-                    a(href="{% url 'users.views.password_reset' %}")
-                      | Recover password
-              {% endif %}
 
       div.container
         div.row
@@ -117,6 +85,7 @@ html(lang="es")
       script(src="{% static 'bower_components/select2/select2_locale_es.js' %}")
       script(src="{% static 'js/site.js' %}")
       script(src="{% static 'js/form.js' %}")
+      script(src="{% static 'js/facebook.js' %}")
       {% endcompress %}
 
       {% compress js %}

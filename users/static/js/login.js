@@ -1,3 +1,3 @@
 window.onload = function() {
-  document.getElementById("id_email").focus();
+  document.getElementById("fb_connect").focus();
 }

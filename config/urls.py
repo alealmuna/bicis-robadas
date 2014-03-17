@@ -10,8 +10,9 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    (r'^accounts/', include('users.urls')),
+    url(r'^accounts/', include('users.urls')),
     url(r'^$', 'base.views.index', name='home'),
+    url(r'^facebook/', include('django_facebook.urls')),
 )
 
 

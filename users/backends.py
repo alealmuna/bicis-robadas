@@ -1,12 +1,13 @@
 # django
 from django.contrib.auth import get_user_model
+from django_facebook.registration_backends import NooptRegistrationBackend
 from django.contrib.auth.backends import ModelBackend
 
 # models
 from users.models import User
 
 
-class CustomBackend(ModelBackend):
+class CustomBackend(ModelBackend, NooptRegistrationBackend):
     """
     Authenticates against users.models.User
     """

@@ -29,6 +29,10 @@ import base64
 import os
 import time
 
+from datetime import timedelta
+import logging
+logger = logging.getLogger(__name__)
+
 # base
 from base import utils
 
@@ -58,9 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         help_text=_("The last name of this user"),
     )
     is_staff = models.BooleanField(
-        _('staff status'), default=False,
-        help_text=_('Designates whether the user can log into this admin '
-                    'site.'),
+        _('staff status'), default=False,        help_text=_('Designates whether the user can log into this admin site.'),
     )
     is_active = models.BooleanField(
         _('active'), default=True,
@@ -75,6 +77,26 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     token = models.CharField(
         max_length=30, default="", blank=True,
         help_text="A token that can be used to verify the user's email"
+    )
+    # Facebook access token
+    access_token = models.TextField(
+        blank=True, null=True,
+        help_text="Facebook access token"
+    )
+    # Facebook username
+    username = models.CharField(
+        max_length=30, default="", blank=True,
+        help_text="Facebook username"
+    )
+    # Facebook id
+    facebook_id = models.BigIntegerField(
+        blank=True, unique=True, null=True,
+        help_text="Facebook id"
+    )
+    # Facebook raw data
+    raw_data = models.TextField(
+        blank=True, null=True,
+        help_text="Facebook raw data"
     )
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
@@ -153,6 +175,50 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
             'user': self,
         }
         self.send_email(template, title, template_vars, fail_silently=False)
+
+    def extend_access_token(self):
+        '''
+        https://developers.facebook.com/roadmap/offline-access-removal/
+        We can extend the token only once per day
+        Normal short lived tokens last 1-2 hours
+        Long lived tokens (given by extending) last 60 days
+
+        The token can be extended multiple times, supposedly on every visit
+        '''
+        logger.info('extending access token for user %s', self.get_user())
+        results = self._extend_access_token(self.access_token)
+        return results
+
+    def _extend_access_token(self, access_token):
+        from open_facebook.api import FacebookAuthorization
+        results = FacebookAuthorization.extend_access_token(access_token)
+        access_token = results['access_token']
+        old_token = self.access_token
+        token_changed = access_token != old_token
+        message = 'a new' if token_changed else 'the same'
+        log_format = 'Facebook provided %s token, which expires at %s'
+        expires_delta = timedelta(days=60)
+        logger.info(log_format, message, expires_delta)
+        if token_changed:
+            logger.info('Saving the new access token')
+            self.access_token = access_token
+            self.save()
+
+        from django_facebook.signals import facebook_token_extend_finished
+        from django_facebook.utils import get_user_model
+        facebook_token_extend_finished.send(
+            sender=get_user_model(), user=self.get_user(), profile=self,
+            token_changed=token_changed, old_token=old_token
+        )
+
+        return results
+
+    def get_user(self):
+        if hasattr(self, 'user'):
+            user = self.user
+        else:
+            user = self
+        return user
 
     #static methods
     @staticmethod

@@ -8,10 +8,10 @@ from django.utils import timezone
 from base.managers import BaseManager
 
 
-class UserManager(BaseUserManager, BaseManager):
+class UserManager(BaseUserManager, BaseManager, ):
     """
     This class is used so the user manager has both the django defined
-    user manager and the cusmtom defiled 'BaseManager
+    user manager and the custom defined 'BaseManager
     ""
     """
     def create_user(self, email, password=None, **extra_fields):
