@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="AppCtrl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no">
+  <title ng-bind="pageTitle"></title>
+
+  <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+  <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+  <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+  <% styles.forEach(function(file) { %>
+  <link href="<%= file %>" rel="stylesheet" /><% }); %>
+</head>
+<body>
+  <header>
+    <h1>
+      <a ui-sref="home" ui-sref-opts="{reload: true}">Bicis Robadas</a>
+    </h1>
+
+    <nav>
+      <a ui-sref="report">Reportar</a>
+      <a ui-sref="about">Nosotros</a>
+    </nav>
+  </header>
+
+  <section class="map" ng-controller="MapCtrl" ng-include="tpl">
+  </section>
+
+  <div ui-view></div>
+
+  <section ui-view="modal" class="modal">
+  </section>
+
+  <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js'></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+  <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+  <script src='//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js'></script>
+
+  <script src='//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
+  <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+
+  <% scripts.forEach(function(file) { %>
+  <script src="<%= file %>"></script><% }); %>
+</body>
+</html>

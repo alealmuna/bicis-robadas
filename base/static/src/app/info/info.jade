@@ -1,0 +1,13 @@
+aside
+  a.crossbutton(href, ng-click="close($event)", ng-if="report || error") ×
+
+  p.loading(ng-if="!report && !error") Cargando...
+
+  div(ng-if="error")
+    span.error Error: {{ error }}
+
+  div(ng-if="report")
+    p {{ report.fields.bike_specs }}
+    img(src="http://placehold.it/300x300")
+    p {{ report.fields.circumstances }}
+    p {{ report.fields.date }}
