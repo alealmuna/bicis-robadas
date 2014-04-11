@@ -1,2 +1,55 @@
 div.report
-  p Acá puedes crear un nuevo reporte, loco
+  h2 Reportar un robo
+
+  textarea(id="bike_specs", ng-model="report.bike_specs",
+    placeholder="Cómo es tu cleta?")
+
+  input(id="bike_price", ng-model="report.bike_price",
+    placeholder="Cuanto vale aprox?")
+
+  hr
+
+  label Fue violento?
+
+  input(id="date", ng-model="report.date",
+    placeholder="Cuanto tiempo dejaste la cleta sola?")
+
+  textarea(id="circumstances", ng-model="report.circumstances",
+    placeholder="Cuéntanos como fue el robo")
+
+  p Tenías alguno de estos?
+
+  label
+    input(ng-model="report.lock_type", type="radio", value="1")
+    | U-lock
+
+  label
+    input(ng-model="report.lock_type", type="radio", value="2")
+    | Cadena
+
+  label
+    input(ng-model="report.lock_type", type="radio", value="3")
+    | Cadena de moto
+
+  label
+    input(ng-model="report.lock_type", type="radio", value="0")
+    | Nada =/
+
+  input(id="date", ng-model="report.date",
+    placeholder="Cuando fue?")
+
+  label Dónde fue?
+  div#map-location.mini-map(map-box-location="map_options")
+
+  hr
+
+  label La encontraste?
+
+  label Le dijiste a los pacos?
+
+  textarea(id="found_details", ng-model="report.found_details",
+    placeholder="Cómo la encontraste? Que bkn =)")
+
+  button(ng-click="save()") Enviar
+
+  span.loading(ng-if="loading") Enviando ...

@@ -1,15 +1,29 @@
-angular.module('app.mapbox', [
+angular.module('app.directives', [
+  'app.modal'
 ])
 
+.directive('mapBox', function() {
+  return {
+    restrict: 'A',
+    controller: 'MapBoxCtrl',
+    scope: true
+  };
+})
+
+.directive('mapBoxLocation', function(){
+  return {
+    restrict: 'A',
+    controller: 'MapBoxLocationCtrl',
+    scope: true
+  };
+})
+
 .controller('MapBoxCtrl', [
-  '$scope',
-  '$element',
-  '$attrs',
-  '$timeout',
-  '$interpolate',
-  '$templateCache',
-  '$compile',
-  function MapBoxCtrl($scope, $element, $attrs, $timeout, $interpolate, $templateCache, $compile)
+'$scope',
+'$element',
+'$attrs',
+'$timeout',
+function($scope, $element, $attrs, $timeout)
 {
   "use strict";
 
@@ -31,7 +45,7 @@ angular.module('app.mapbox', [
     zoom: 14,
     id: $element.attr('id') || 'map',
     marker_icon: L.mapbox.marker.icon({
-      'marker-symbol': 'post',
+      //'marker-symbol': 'post',
       'marker-color': '0044FF'
     }),
     locate: false,
@@ -53,8 +67,6 @@ angular.module('app.mapbox', [
       shadowAnchor: [0, 0]
     })
   };
-
-  // $scope's variables --------------------------------------------------------
 
   // Listeners -----------------------------------------------------------------
   $scope.$watch($attrs.mapBox, function (new_options) {
@@ -86,11 +98,12 @@ angular.module('app.mapbox', [
       });
 
       if (config.locate) {
-        //L.control.locate().addTo(map);
+        L.control.locate().addTo(map);
 
         if (config.locate === 'auto') {
-          $timeout(function() {
-            console.log('DONDE ESTAS?');
+          map.locate({
+            setView: true,
+            maxZoom: config.zoom
           });
         }
       }
@@ -103,18 +116,10 @@ angular.module('app.mapbox', [
     }
   });
 
-  // $scope's Functions --------------------------------------------------------
-
   // Controller's functions ----------------------------------------------------
-  function getHTML(template, data)
-  {
-    return $interpolate($templateCache.get(template))(data);
-  }
-
   function setMarkers(list) {
 
-    var marker, html, icon_type;
-    html = $templateCache.get(config.markerPopupTemplate);
+    var marker, icon_type;
     markers.clearLayers();
 
     _.each(list, function(item, i) {
@@ -134,10 +139,80 @@ angular.module('app.mapbox', [
   }
 }])
 
-.directive('mapBox', function() {
-  return {
-    restrict: 'A',
-    controller: 'MapBoxCtrl',
-    scope: true
+.controller('MapBoxLocationCtrl', [
+'$scope',
+'$element',
+'$attrs',
+'$timeout',
+function($scope, $element, $attrs, $timeout) {
+
+  "use strict";
+
+  // Controller's variables ----------------------------------------------------
+  var map, config, marker;
+
+  config = {
+    code: 'examples.map-9ijuk24y',
+    map_options: {
+      detectRetina: true,
+      // retinaVersion: 'examples.map-zswgei2n'
+      format: 'jpg70'
+      // scrollWheelZoom: false
+    },
+    center: {
+      lat: -37.82,
+      lng: 175.215
+    },
+    zoom: 14,
+    id: $element.attr('id') || 'map-location',
+    marker_icon: L.mapbox.marker.icon({
+      'marker-color': '0044FF'
+    }),
+    locate: true,
+
+    // callbacks
+    onReady: angular.noop,
+    onMarkerDrop: angular.noop
   };
-});
+
+  // Listeners -----------------------------------------------------------------
+  $scope.$watch($attrs.mapBoxLocation, function (new_options) {
+    if (new_options && !map) {
+      config = $.extend({}, config, new_options);
+
+      map = L.mapbox.map(config.id, config.code, config.map_options)
+        .setView([config.center.lat, config.center.lng], config.zoom);
+
+      map.whenReady(function(e) {
+        config.onReady(e, map.getBounds());
+
+        marker = L.marker(new L.LatLng(config.center.lat, config.center.lng),
+        {
+          icon: config.marker_icon,
+          draggable: true
+        });
+
+        map.on('locationfound', function(e) {
+          marker.setLatLng(e.latlng);
+          config.onMarkerDrop(marker, marker.getLatLng());
+        });
+
+        marker.addTo(map);
+        marker.on('dragend', function() {
+          config.onMarkerDrop(marker, marker.getLatLng());
+        });
+      });
+
+      if (config.locate) {
+        L.control.locate().addTo(map);
+
+        if (config.locate === 'auto') {
+          map.locate({
+            setView: true,
+            maxZoom: config.zoom
+          });
+        }
+      }
+    }
+  });
+}]);

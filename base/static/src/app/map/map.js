@@ -17,7 +17,7 @@ function($scope, $state, Marker)
       lng: 289.34
     },
     zoom: 12,
-    locate: true,
+    locate: 'auto',
     marker_icon: L.mapbox.marker.icon({
       'marker-symbol': 'post',
       'marker-color': '0044FF'
