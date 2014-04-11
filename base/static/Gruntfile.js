@@ -18,7 +18,8 @@ module.exports = function(grunt)
     clean: {
       build: ['build'],
       dist: ['dist'],
-      tmp: ['tmp']
+      tmp: ['tmp'],
+      django: ['css', 'js']
     },
 
     copy: {
@@ -41,6 +42,25 @@ module.exports = function(grunt)
             filter: 'isFile'
           }
         ]
+      },
+      django: {
+        files: [
+          {
+            src: ['dist/assets/sources/*'],
+            dest: 'js/sources/',
+            flatten: true,
+            expand: true,
+            filter: 'isFile'
+          },
+          {
+            src: ['dist/assets/app.js'],
+            dest: 'js/app.js'
+          },
+          {
+            src: ['dist/assets/style.css'],
+            dest: 'css/style.css'
+          }
+        ]
       }
     },
 
@@ -48,15 +68,6 @@ module.exports = function(grunt)
       css: {
         src: ['src/app/**/*.css'],
         dest: 'dist/assets/style.css'
-      },
-
-      app: {
-        src: [
-          'build/src/app/app.js',
-          'build/src/app/**/*.js',
-          'build/src/common/**/*.js'
-        ],
-        dest: 'dist/assets/app.js'
       }
     },
 
@@ -83,6 +94,11 @@ module.exports = function(grunt)
         options: {
           message: 'Dist Complete'
         }
+      },
+      django: {
+        options: {
+          message: 'Django Complete'
+        }
       }
     },
 
@@ -96,14 +112,14 @@ module.exports = function(grunt)
 
     uglify: {
       options: {
-        sourceMap: 'dist/js/sources/source-map.js',
-        sourceMapRoot: '/js/sources/',
-        sourceMappingURL: 'sources/source-map.js'
+        sourceMap: 'dist/assets/sources/app.map',
+        sourceMapRoot: '/assets/sources/',
+        sourceMappingURL: 'sources/app.map'
         //sourceMapPrefix: 3
       },
       dist: {
         files: {
-          'dist/js/app.js': [
+          'dist/assets/app.js': [
             'build/src/app/app.js',
             'build/src/app/**/*.js',
             'build/src/common/**/*.js'
@@ -172,7 +188,10 @@ module.exports = function(grunt)
         options: {
           dir: 'dist'
         },
-        src: ['assets/app.js', 'assets/style.css']
+        src: ['dist/assets/app.js', 'dist/assets/style.css']
+      },
+      django: {
+        src: ['js/app.js', 'css/style.css']
       }
     },
 
@@ -266,12 +285,24 @@ module.exports = function(grunt)
   grunt.registerTask('dist', [
     'clean:dist',
     'clean:tmp',
+    'build',
     'ngmin',
     'concat',
-    'copy:source_maps',
+    'copy:source_map',
     'uglify',
     'index:dist',
-    'notify:compile'
+    'notify:dist'
+  ]);
+
+  grunt.registerTask('django', [
+    'clean:django',
+    'dist',
+    'copy:django',
+    'index:django',
+    'clean:build',
+    'clean:dist',
+    'clean:tmp',
+    'notify:django'
   ]);
 
   grunt.registerTask('default', ['watch']);
