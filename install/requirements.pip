@@ -15,4 +15,4 @@ pyjade==2.0.3
 recaptcha-client==1.0.6
 six==1.4.1
 wsgiref==0.1.2
--e git://github.com/aladagemre/Django-facebook.git#egg=Django-facebook-master
+-e git://github.com/tschellenbach/Django-facebook.git#egg=Django-facebook-master

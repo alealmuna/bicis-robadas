@@ -4,6 +4,13 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+from rest_framework import routers
+
+from thefts import views
+
+router = routers.DefaultRouter()
+router.register(r'reports', views.ReportViewSet)
+
 
 admin.autodiscover()
 
@@ -13,6 +20,7 @@ urlpatterns = patterns(
     url(r'^accounts/', include('users.urls')),
     url(r'^$', 'base.views.index', name='home'),
     url(r'^facebook/', include('django_facebook.urls')),
+    url(r'^', include(router.urls)),
 )
 
 

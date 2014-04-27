@@ -197,6 +197,7 @@ INSTALLED_APPS = (
     'bootstrap_admin',
     'django.contrib.admin',
     'django_tables2',
+    'rest_framework',
 )
 # Set the apps that are installed locally
 try:
@@ -268,3 +269,8 @@ FACEBOOK_APP_SECRET = '73c7a6460975064295113e316e6560c6'
 FACEBOOK_DEFAULT_SCOPE = ['email', 'user_birthday']
 FACEBOOK_REGISTRATION_BACKEND = 'users.backends.CustomBackend'
 FACEBOOK_REGISTRATION_FORM = 'users.forms.UserCreationForm'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGINATE_BY': 10
+}
