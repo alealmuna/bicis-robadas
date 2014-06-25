@@ -24,6 +24,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 
+# stl
+import uuid
+
 
 def login(request):
     """ view that renders the login """
@@ -36,7 +39,7 @@ def login(request):
             req, data, initial={'captcha': request.META['REMOTE_ADDR']})
 
     # If the form has been submitted...
-    template_name = "accounts/login.html"
+    template_name = "accounts/login.jade"
 
     if request.method == "POST":
         login_try_count = request.session.get('login_try_count', 0)
@@ -153,3 +156,34 @@ def user_new_confirm(request, uidb36=None, token=None,
                              _("Invalid verification link"))
 
     return redirect('login')
+
+
+def social_auth_login(request):
+    """ Associates extra data from facebook into the user. """
+
+    # extra data received from facebook
+    extra_data = request.user.social_auth.filter(
+        provider='facebook')[0].extra_data
+    extra_data_dict = {}
+
+    # get current user
+    user = request.user
+
+    # check if facebook id is already set
+    if not user.facebook_id:
+        try:
+            facebook_id = extra_data['id']
+        except:
+            pass
+        else:
+            extra_data_dict['facebook_id'] = facebook_id
+
+    # check if the user has a usable password
+    if not user.has_usable_password():
+        # generates random password
+        extra_data_dict['password'] = uuid.uuid4()
+
+    # update user with the received data
+    user.update(**extra_data_dict)
+
+    return redirect('home')

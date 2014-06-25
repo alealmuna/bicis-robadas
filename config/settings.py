@@ -72,9 +72,9 @@ TEMPLATE_DEBUG = DEBUG
 # Since we are using our custom user model, we need to set the authentication
 # backend to the CustomBackend, so it returns the User model
 AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth_backends.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
     'users.backends.CustomBackend',
+    'social.backends.facebook.FacebookOAuth2',
 )
 
 ADMINS = (
@@ -192,12 +192,12 @@ INSTALLED_APPS = (
     "compressor",
     'base',
     'users',
-    'django_facebook',
     'thefts',
     'bootstrap_admin',
     'django.contrib.admin',
     'django_tables2',
     'rest_framework',
+    'social.apps.django_app.default',
 )
 # Set the apps that are installed locally
 try:
@@ -236,19 +236,6 @@ LOGGING = {
     }
 }
 
-# Context processors
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'django_facebook.context_processors.facebook',
-)
-
 # user loggin
 LOGIN_REDIRECT_URL = "/"
 
@@ -258,17 +245,18 @@ LOGIN_REDIRECT_URL = "/"
 INTERNAL_IPS = ('127.0.0.1',)
 
 AUTH_USER_MODEL = 'users.User'
-# Facebook Profile model
-AUTH_PROFILE_MODULE = 'django_facebook.FacebookProfile'
 
 RECAPTCHA_PUBLIC = '6LfLr90SAAAAABRD5AIfqIIYyIJ8Ls698OkQacNy'
 RECAPTCHA_PRIVATE = '6LfLr90SAAAAAMJ63_e1jrxg-31NAJynZtF3VGmJ'
 
-FACEBOOK_APP_ID = '438204562857972'
-FACEBOOK_APP_SECRET = '73c7a6460975064295113e316e6560c6'
-FACEBOOK_DEFAULT_SCOPE = ['email', 'user_birthday']
-FACEBOOK_REGISTRATION_BACKEND = 'users.backends.CustomBackend'
-FACEBOOK_REGISTRATION_FORM = 'users.forms.UserCreationForm'
+# social-auth facebook configuration
+SOCIAL_AUTH_FACEBOOK_KEY = '438204562857972'
+SOCIAL_AUTH_FACEBOOK_SECRET = '73c7a6460975064295113e316e6560c6'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_birthday']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
+
+# social-auth custom model
+SOCIAL_AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),

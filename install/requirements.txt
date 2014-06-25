@@ -9,3 +9,5 @@ bootstrap-admin==0.2.5
 pyjade==2.0.3
 recaptcha-client==1.0.6
 django-tables2==0.14.0
+djangorestframework==2.3.14
+python-social-auth==0.1.21

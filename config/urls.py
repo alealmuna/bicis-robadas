@@ -18,8 +18,9 @@ urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('users.urls')),
+    url(r'^logged-in/', 'users.views.social_auth_login',
+        name='social_auth_login'),
     url(r'^$', 'base.views.index', name='home'),
-    url(r'^facebook/', include('django_facebook.urls')),
     url(r'^', include(router.urls)),
 )
 

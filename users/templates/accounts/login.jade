@@ -1,0 +1,9 @@
+extends "base.jade"
+
+- load i18n static
+
+block javascripts
+  script(src='{{STATIC_URL}}js/login.js')
+
+block content
+    a(href="{% url 'social:begin' 'facebook' %}") FB Login

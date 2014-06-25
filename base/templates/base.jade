@@ -12,16 +12,24 @@ html(lang="es")
     meta(name="description", content="")
     meta(name="author", content="http://magnet.cl")
 
+    link(href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css",
+      rel="stylesheet")
+
     {% compress css %}
+    link(href="{% static 'css/bootstrap/bootstrap.less' %}", rel="stylesheet", type="text/less", charset="utf-8")
     link(href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}", rel="stylesheet")
-    link(href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}", rel="stylesheet")
     link(href="{% static 'bower_components/bootstrap-datepicker/css/datepicker.css' %}", rel="stylesheet")
     link(href="{% static 'bower_components/select2/select2.css' %}", rel="stylesheet")
-    link(href="{% static 'css/bootstrap_custom.css' %}", rel="stylesheet")
-    link(href="{% static 'css/site.css' %}", rel="stylesheet")
+    link(href="{% static 'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' %}", rel="stylesheet")
+    link(type="text/less", rel="stylesheet",
+      href="{% static 'css/bootstrap_custom.less' %}", charset="utf-8")
+    link(type="text/less", rel="stylesheet", href="{% static 'css/site.less' %}",
+      charset="utf-8")
+    link(href="{% static 'bower_components/dropzone/downloads/css/basic.css' %}", rel="stylesheet")
     link(href="{% static 'css/detail.css' %}", rel="stylesheet")
-    link(href="{% static 'css/form.css' %}", rel="stylesheet")
-    link(href="{% static 'css/facebook.css'%}", rel="stylesheet")
+    link(href="{% static 'css/form.less' %}", rel="stylesheet", type="text/less", charset="utf-8")
+    link(href="{% static 'css/sticky-footer.css' %}", rel="stylesheet")
+    link(href="{% static 'css/contest/base.less' %}", rel="stylesheet", type="text/less", charset="utf-8")
     {% endcompress %}
 
     //if lte IE 7
@@ -47,7 +55,7 @@ html(lang="es")
               span.icon-bar
             a.navbar-brand(href="{% url 'home' %}") BicisRobadas
           div.navbar-collapse.collapse
-            - if user.is_authenticated 
+            - if user.is_authenticated
               {% if user.is_staff %}
               ul.nav.navbar-nav
                 li
@@ -83,10 +91,17 @@ html(lang="es")
       script(src="{% static 'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}")
       script(src="{% static 'bower_components/select2/select2.min.js' %}")
       script(src="{% static 'bower_components/select2/select2_locale_es.js' %}")
-      script(src="{% static 'js/site.js' %}")
+      script(src="{% static 'bower_components/bootbox/bootbox.js' %}")
+      script(src="{% static 'bower_components/moment/moment.js' %}")
+      script(src="{% static 'bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js' %}")
+      script(src="{% static 'bower_components/eonasdan-bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js' %}")
+      script(src="{% static 'js/vendor/oop.js' %}")
+      script(src="{% static 'js/vendor/jquery-ui-1.10.4.custom.min.js' %}")
+      script(src="{% static 'js/app.js' %}")
       script(src="{% static 'js/form.js' %}")
-      script(src="{% static 'js/facebook.js' %}")
       {% endcompress %}
+
+      block javascript_data
 
       {% compress js %}
       block javascripts
