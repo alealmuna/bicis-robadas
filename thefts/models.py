@@ -65,3 +65,9 @@ class Report(BaseModel):
     found_details = models.TextField(
         help_text=("Details about how the bike was recovered.")
     )
+
+    objects = models.GeoManager()
+
+    # Returns the string representation of the model.
+    def __str__(self):
+        return str(self.location)

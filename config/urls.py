@@ -21,6 +21,7 @@ urlpatterns = patterns(
     url(r'^logged-in/', 'users.views.social_auth_login',
         name='social_auth_login'),
     url(r'^$', 'base.views.index', name='home'),
+    url(r'^search/$', 'thefts.views.search'),
     url(r'^', include(router.urls)),
 )
 
